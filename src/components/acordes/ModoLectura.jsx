@@ -11,6 +11,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { transponerContenido } from '../../utils/transpositor';
 
 function SegmentoLectura({ texto, acorde, mostrarAcordes, fontSize }) {
     return (
@@ -56,7 +57,7 @@ function ParrafoLectura({ parrafo, mostrarAcordes, fontSize, modoOscuro }) {
     const colores = ETIQUETA_COLORES[parrafo.tipo] || ETIQUETA_COLORES.estrofa;
 
     return (
-    <Box sx={{ mb: fontSize * 0.15, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Box sx={{ mb: fontSize * 0.15, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <Box sx={{
                 display: 'inline-block',
                 bgcolor: colores.bg,
@@ -69,7 +70,7 @@ function ParrafoLectura({ parrafo, mostrarAcordes, fontSize, modoOscuro }) {
                 fontWeight: 'bold',
                 letterSpacing: 1,
                 textTransform: 'uppercase',
-    alignSelf: 'flex-start',
+                alignSelf: 'flex-start',
             }}>
                 {parrafo.etiqueta || parrafo.tipo}
             </Box>
@@ -95,13 +96,21 @@ function ParrafoLectura({ parrafo, mostrarAcordes, fontSize, modoOscuro }) {
     );
 }
 
+
+
 export default function ModoLectura({ cancion, onCerrar }) {
     const [modoOscuro, setModoOscuro] = useState(true);
     const [mostrarAcordes, setMostrarAcordes] = useState(true);
     const [fontSize, setFontSize] = useState(22);
     const [scrollActivo, setScrollActivo] = useState(false);
-    const [velocidad, setVelocidad] = useState(50);
+    const [velocidad, setVelocidad] = useState(10);
     const [controlesVisibles, setControlesVisibles] = useState(true);
+    const [semitonos, setSemitonos] = useState(0);
+
+    const contenidoTranspuesto = transponerContenido(
+    cancion?.letra?.contenido || [],
+    semitonos
+);
 
     const contenedorRef = useRef(null);
     const scrollRef = useRef(null);
@@ -222,7 +231,43 @@ export default function ModoLectura({ cancion, onCerrar }) {
                         label={<Typography sx={{ color: text, fontSize: 12 }}>Acordes</Typography>}
                         sx={{ m: 0 }}
                     />
-
+                    {/* Transpositor */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Tooltip title="Bajar semitono">
+                            <IconButton
+                                size="small"
+                                onClick={() => setSemitonos(s => s - 1)}
+                                sx={{ color: text }}
+                            >
+                                <RemoveIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Tono original">
+                            <Typography
+                                onClick={() => setSemitonos(0)}
+                                sx={{
+                                    color: semitonos === 0 ? text : '#4fc3f7',
+                                    fontSize: 12,
+                                    minWidth: 32,
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold',
+                                    fontFamily: 'monospace',
+                                }}
+                            >
+                                {semitonos === 0 ? 'T.O.' : semitonos > 0 ? `+${semitonos}` : semitonos}
+                            </Typography>
+                        </Tooltip>
+                        <Tooltip title="Subir semitono">
+                            <IconButton
+                                size="small"
+                                onClick={() => setSemitonos(s => s + 1)}
+                                sx={{ color: text }}
+                            >
+                                <AddIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                     {/* Tamaño texto */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                         <Tooltip title="Reducir texto">
@@ -271,7 +316,7 @@ export default function ModoLectura({ cancion, onCerrar }) {
                         Esta canción no tiene letra cargada.
                     </Typography>
                 ) : (
-                    contenido.map((parrafo, i) => (
+                    contenidoTranspuesto.map((parrafo, i) => (
                         <ParrafoLectura
                             key={parrafo.id || i}
                             parrafo={parrafo}

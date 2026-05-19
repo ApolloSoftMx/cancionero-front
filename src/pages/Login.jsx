@@ -45,7 +45,10 @@ export default function Login() {
                     <Box sx={{ textAlign: 'center', mb: 3 }}>
                         <MusicNoteIcon sx={{ fontSize: 48, color: 'primary.main' }} />
                         <Typography variant="h5" fontWeight="bold">
-                            Cancionero Católico
+                            REMA Music
+                        </Typography>
+                        <Typography variant='body1'>
+                            Cancionero
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             Inicia sesión para continuar

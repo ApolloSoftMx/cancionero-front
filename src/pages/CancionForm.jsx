@@ -137,7 +137,12 @@ export default function CancionForm() {
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
             {/* Tabs */}
-            <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
+            <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{
+                mb: 3,
+                '& .MuiTab-root': { color: 'rgba(255,255,255,0.7)' },
+                '& .MuiTab-root.Mui-selected': { color: '#ffffff' },
+                '& .MuiTabs-indicator': { backgroundColor: '#ffffff' },
+            }}>
                 <Tab label="Datos generales" />
                 <Tab label="Clasificación" />
                 <Tab icon={<EditIcon fontSize="small" />} iconPosition="start" label="Editor de letra" />
