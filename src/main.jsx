@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { CatalogosProvider } from './context/CatalogosContext';
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Canciones from './pages/Canciones'
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={
                         <ProtectedRoute>
-                            <Layout />
+                            <CatalogosProvider>                
+                                <Layout />
+                            </CatalogosProvider>
                         </ProtectedRoute>
                     }>
                         <Route index element={<Navigate to="/canciones" replace />} />

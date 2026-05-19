@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCatalogos } from '../context/CatalogosContext';
 import api from '../api/axios';
 import {
     Box, Typography, TextField, Button, Card, CardContent,
@@ -17,17 +18,16 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Canciones() {
     const [canciones,  setCanciones]  = useState([]);
-    const [secciones,  setSecciones]  = useState([]);
-    const [tipos,      setTipos]      = useState([]);
     const [loading,    setLoading]    = useState(true);
     const [error,      setError]      = useState('');
     const [buscar,     setBuscar]     = useState('');
     const [seccionId,  setSeccionId]  = useState('');
     const [tipoId,     setTipoId]     = useState('');
+    const { secciones, tipos, tonalidades } = useCatalogos();
     const navigate = useNavigate();
 
     useEffect(() => {
-        cargarCatalogos();
+        // cargarCatalogos();
     }, []);
 
     useEffect(() => {

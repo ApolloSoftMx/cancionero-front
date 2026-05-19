@@ -13,14 +13,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import TempoIcon from '@mui/icons-material/Speed';
 import NotesIcon from '@mui/icons-material/Notes';
+import ModoLectura from '../components/acordes/ModoLectura';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 export default function CancionDetalle() {
-    const { id }       = useParams();
-    const navigate     = useNavigate();
-    const [cancion,    setCancion]  = useState(null);
-    const [loading,    setLoading]  = useState(true);
-    const [error,      setError]    = useState('');
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [cancion, setCancion] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
     const [eliminando, setEliminando] = useState(false);
+    const [modoLectura, setModoLectura] = useState(false);
 
     useEffect(() => {
         cargarCancion();
@@ -91,6 +94,14 @@ export default function CancionDetalle() {
                         disabled={eliminando}
                     >
                         <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Modo lectura en vivo">
+                    <IconButton
+                        color="success"
+                        onClick={() => setModoLectura(true)}
+                    >
+                        <MenuBookIcon />
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -213,6 +224,12 @@ export default function CancionDetalle() {
                     </Card>
                 </Grid>
             </Grid>
+            {modoLectura && (
+                <ModoLectura
+                    cancion={cancion}
+                    onCerrar={() => setModoLectura(false)}
+                />
+            )}
         </Box>
     );
 }

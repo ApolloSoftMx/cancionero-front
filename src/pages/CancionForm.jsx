@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useCatalogos } from '../context/CatalogosContext';
 import api from '../api/axios';
 import EditorAcordes from '../components/acordes/EditorAcordes';
 import VisualizadorLetra from '../components/acordes/VisualizadorLetra';
@@ -23,9 +24,7 @@ export default function CancionForm() {
     const [loading,    setLoading]    = useState(false);
     const [guardando,  setGuardando]  = useState(false);
     const [error,      setError]      = useState('');
-    const [secciones,  setSecciones]  = useState([]);
-    const [tipos,      setTipos]      = useState([]);
-    const [tonalidades,setTonalidades]= useState([]);
+    const { secciones, tipos, tonalidades } = useCatalogos();
 
     // Datos del formulario
     const [titulo,      setTitulo]      = useState('');
@@ -39,24 +38,9 @@ export default function CancionForm() {
     const [letra,       setLetra]       = useState([]);
 
     useEffect(() => {
-        cargarCatalogos();
         if (esEdicion) cargarCancion();
     }, [id]);
 
-    async function cargarCatalogos() {
-        try {
-            const [s, t, ton] = await Promise.all([
-                api.get('/secciones'),
-                api.get('/tipos'),
-                api.get('/tonalidades'),
-            ]);
-            setSecciones(s.data);
-            setTipos(t.data);
-            setTonalidades(ton.data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
     async function cargarCancion() {
         try {

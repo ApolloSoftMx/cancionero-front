@@ -10,16 +10,24 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-const ACORDES = [
-    'A', 'Am', 'A7', 'Am7',
-    'B', 'Bm', 'B7',
-    'C', 'Cm', 'C7',
-    'D', 'Dm', 'D7',
-    'E', 'Em', 'E7',
-    'F', 'Fm', 'F7',
-    'G', 'Gm', 'G7',
-    'Ab', 'Bb', 'Db', 'Eb', 'Gb',
-    'Abm', 'Bbm', 'Dbm', 'Ebm',
+const GRUPOS_ACORDES = [
+    { label: 'Mayores',         acordes: ['C','D','E','F','G','A','B'] },
+    { label: 'Menores',         acordes: ['Cm','Dm','Em','Fm','Gm','Am','Bm'] },
+    { label: 'Sostenidos',      acordes: ['C#','D#','F#','G#','A#','C#m','D#m','F#m','G#m','A#m'] },
+    { label: 'Bemoles',         acordes: ['Db','Eb','Gb','Ab','Bb','Dbm','Ebm','Gbm','Abm','Bbm'] },
+    { label: '7ª Dom',          acordes: ['C7','D7','E7','F7','G7','A7','B7','Db7','Eb7','F#7','Ab7','Bb7'] },
+    { label: '7ª Men',          acordes: ['Cm7','Dm7','Em7','Fm7','Gm7','Am7','Bm7'] },
+    { label: 'Maj7',            acordes: ['Cmaj7','Dmaj7','Emaj7','Fmaj7','Gmaj7','Amaj7','Bmaj7','Dbmaj7','Ebmaj7','Abmaj7','Bbmaj7'] },
+    { label: 'Sus2',            acordes: ['Csus2','Dsus2','Esus2','Fsus2','Gsus2','Asus2','Bsus2'] },
+    { label: 'Sus4',            acordes: ['Csus4','Dsus4','Esus4','Fsus4','Gsus4','Asus4','Bsus4'] },
+    { label: '7sus4',           acordes: ['C7sus4','D7sus4','E7sus4','F7sus4','G7sus4','A7sus4','B7sus4'] },
+    { label: 'Add9',            acordes: ['Cadd9','Dadd9','Eadd9','Fadd9','Gadd9','Aadd9','Badd9'] },
+    { label: '9ª',              acordes: ['C9','D9','E9','F9','G9','A9','B9','Cm9','Dm9','Em9','Gm9','Am9'] },
+    { label: 'Dim',             acordes: ['Cdim','Ddim','Edim','Fdim','Gdim','Adim','Bdim','Cdim7','Ddim7','Gdim7','Adim7'] },
+    { label: 'Aug',             acordes: ['Caug','Daug','Eaug','Faug','Gaug','Aaug','Baug'] },
+    { label: 'm7b5',            acordes: ['Cm7b5','Dm7b5','Em7b5','Fm7b5','Gm7b5','Am7b5','Bm7b5'] },
+    { label: 'Slash',           acordes: ['C/E','C/G','D/F#','D/A','E/G#','F/A','G/B','G/F','A/C#','A/G','Am/E','Am/G','Dm/F','Em/G'] },
+    { label: 'Alterados',       acordes: ['G7b9','G7#9','D7b9','A7b9','E7b9','C7#11','F7#11','Bb7#11'] },
 ];
 
 const TIPOS_PARRAFO = [
@@ -228,19 +236,27 @@ export default function EditorAcordes({ valor = [], onChange }) {
                 <Typography variant="subtitle2" gutterBottom fontWeight="bold">
                     1. Selecciona un acorde
                 </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
-                    {ACORDES.map(a => (
-                        <Chip
-                            key={a}
-                            label={a}
-                            onClick={() => setAcordeSeleccionado(a === acordeSeleccionado ? '' : a)}
-                            color={acordeSeleccionado === a ? 'primary' : 'default'}
-                            variant={acordeSeleccionado === a ? 'filled' : 'outlined'}
-                            size="small"
-                            icon={<MusicNoteIcon />}
-                        />
-                    ))}
-                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+    {GRUPOS_ACORDES.map(grupo => (
+        <Box key={grupo.label}>
+            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', mr: 1 }}>
+                {grupo.label}
+            </Typography>
+            <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {grupo.acordes.map(a => (
+                    <Chip
+                        key={a}
+                        label={a}
+                        onClick={() => setAcordeSeleccionado(a === acordeSeleccionado ? '' : a)}
+                        color={acordeSeleccionado === a ? 'primary' : 'default'}
+                        variant={acordeSeleccionado === a ? 'filled' : 'outlined'}
+                        size="small"
+                    />
+                ))}
+            </Box>
+        </Box>
+    ))}
+</Box>
                 {acordeSeleccionado && (
                     <Typography variant="caption" color="primary" sx={{ mt: 1, display: 'block' }}>
                         Acorde activo: <strong>{acordeSeleccionado}</strong> — haz clic en una palabra para asignarlo
