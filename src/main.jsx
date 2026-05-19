@@ -13,8 +13,8 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
+            <BrowserRouter basename='/remamusic'>
         <AuthProvider>
-            <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={
@@ -31,7 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route path="canciones/:id/editar" element={<CancionForm />} />
                     </Route>
                 </Routes>
-            </BrowserRouter>
         </AuthProvider>
+            </BrowserRouter>
     </React.StrictMode>
 )
