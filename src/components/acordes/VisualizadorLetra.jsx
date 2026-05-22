@@ -1,11 +1,13 @@
 import { Box, Typography, Chip, Divider, Paper } from '@mui/material';
+import { useTheme } from '@mui/material';
+
 
 const COLORES_TIPO = {
     estrofa: { bg: '#f5f5f5', border: '#e0e0e0', label: '#757575' },
-    coro:    { bg: '#e8f4fd', border: '#90caf9', label: '#1565c0' },
-    puente:  { bg: '#f3e5f5', border: '#ce93d8', label: '#6a1b9a' },
-    intro:   { bg: '#e8f5e9', border: '#a5d6a7', label: '#2e7d32' },
-    final:   { bg: '#fff3e0', border: '#ffcc80', label: '#e65100' },
+    coro: { bg: '#e8f4fd', border: '#90caf9', label: '#1565c0' },
+    puente: { bg: '#f3e5f5', border: '#ce93d8', label: '#6a1b9a' },
+    intro: { bg: '#e8f5e9', border: '#a5d6a7', label: '#2e7d32' },
+    final: { bg: '#fff3e0', border: '#ffcc80', label: '#e65100' },
 };
 
 function Segmento({ texto, acorde }) {
@@ -57,6 +59,41 @@ function Linea({ segmentos }) {
 }
 
 function Parrafo({ parrafo }) {
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+
+    const COLORES_TIPO = {
+        estrofa: {
+            bg: isDark ? '#1e1e1e' : '#f5f5f5',
+            border: isDark ? '#444' : '#e0e0e0',
+            labelBg: isDark ? '#333' : '#e0e0e0',
+            labelColor: isDark ? '#fff' : '#555',
+        },
+        coro: {
+            bg: isDark ? '#0d2137' : '#e8f4fd',
+            border: isDark ? '#1565c0' : '#90caf9',
+            labelBg: '#1565c0',
+            labelColor: '#fff',
+        },
+        puente: {
+            bg: isDark ? '#1a0a2e' : '#f3e5f5',
+            border: isDark ? '#6a1b9a' : '#ce93d8',
+            labelBg: '#6a1b9a',
+            labelColor: '#fff',
+        },
+        intro: {
+            bg: isDark ? '#0a1f0a' : '#e8f5e9',
+            border: isDark ? '#2e7d32' : '#a5d6a7',
+            labelBg: '#2e7d32',
+            labelColor: '#fff',
+        },
+        final: {
+            bg: isDark ? '#1f0e00' : '#fff3e0',
+            border: isDark ? '#e65100' : '#ffcc80',
+            labelBg: '#e65100',
+            labelColor: '#fff',
+        },
+    };
     const colores = COLORES_TIPO[parrafo.tipo] || COLORES_TIPO.estrofa;
 
     return (
@@ -130,12 +167,18 @@ export default function VisualizadorLetra({ contenido = [], titulo, autor, tonal
 
             {/* Leyenda de colores */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
-                {Object.entries(COLORES_TIPO).map(([tipo, colores]) => (
+                {[
+                    { tipo: 'Estrofa', bg: '#555' },
+                    { tipo: 'Coro', bg: '#1565c0' },
+                    { tipo: 'Puente', bg: '#6a1b9a' },
+                    { tipo: 'Intro', bg: '#2e7d32' },
+                    { tipo: 'Final', bg: '#e65100' },
+                ].map(({ tipo, bg }) => (
                     <Chip
                         key={tipo}
-                        label={tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+                        label={tipo}
                         size="small"
-                        sx={{ bgcolor: colores.bg, borderColor: colores.border, border: '1px solid' }}
+                        sx={{ bgcolor: bg, color: '#fff', fontWeight: 'bold', fontSize: '0.7rem' }}
                     />
                 ))}
             </Box>

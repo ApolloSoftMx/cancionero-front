@@ -16,26 +16,26 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 
 export default function CancionForm() {
-    const { id }     = useParams();
-    const navigate   = useNavigate();
-    const esEdicion  = Boolean(id);
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const esEdicion = Boolean(id);
 
-    const [tab,        setTab]        = useState(0);
-    const [loading,    setLoading]    = useState(false);
-    const [guardando,  setGuardando]  = useState(false);
-    const [error,      setError]      = useState('');
+    const [tab, setTab] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [guardando, setGuardando] = useState(false);
+    const [error, setError] = useState('');
     const { secciones, tipos, tonalidades } = useCatalogos();
 
     // Datos del formulario
-    const [titulo,      setTitulo]      = useState('');
-    const [autor,       setAutor]       = useState('');
-    const [fuente,      setFuente]      = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [autor, setAutor] = useState('');
+    const [fuente, setFuente] = useState('');
     const [tonalidadId, setTonalidadId] = useState('');
-    const [bpm,         setBpm]         = useState('');
-    const [notas,       setNotas]       = useState('');
-    const [seccionesSeleccionadas,  setSeccionesSeleccionadas]  = useState([]);
-    const [tiposSeleccionados,      setTiposSeleccionados]      = useState([]);
-    const [letra,       setLetra]       = useState([]);
+    const [bpm, setBpm] = useState('');
+    const [notas, setNotas] = useState('');
+    const [seccionesSeleccionadas, setSeccionesSeleccionadas] = useState([]);
+    const [tiposSeleccionados, setTiposSeleccionados] = useState([]);
+    const [letra, setLetra] = useState([]);
 
     useEffect(() => {
         if (esEdicion) cargarCancion();
@@ -151,9 +151,10 @@ export default function CancionForm() {
 
             {/* Tab 0 — Datos generales */}
             {tab === 0 && (
-                <Card>
+                <Card sx={{ maxWidth: 1200, mx: 'auto' }}>
                     <CardContent>
                         <Grid container spacing={2}>
+                            {/* Título — ancho completo */}
                             <Grid item xs={12}>
                                 <TextField
                                     label="Título *"
@@ -162,6 +163,8 @@ export default function CancionForm() {
                                     onChange={e => setTitulo(e.target.value)}
                                 />
                             </Grid>
+
+                            {/* Autor y Fuente */}
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Autor"
@@ -178,7 +181,34 @@ export default function CancionForm() {
                                     onChange={e => setFuente(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+
+                            {/* Tonalidad y BPM */}
+                            
+                            <Grid item xs={6} sm={3}>
+                                <TextField
+                                    label="BPM"
+                                    type="number"
+                                    fullWidth
+                                    value={bpm}
+                                    onChange={e => setBpm(e.target.value)}
+                                    inputProps={{ min: 40, max: 300 }}
+                                />
+                            </Grid>
+
+                            {/* Notas */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Notas del músico"
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    value={notas}
+                                    onChange={e => setNotas(e.target.value)}
+                                    placeholder="Capo, digitaciones especiales..."
+                                />
+                            </Grid>
+
+                            <Grid item xs={6} sm={4}>
                                 <FormControl fullWidth>
                                     <InputLabel>Tonalidad</InputLabel>
                                     <Select
@@ -192,27 +222,6 @@ export default function CancionForm() {
                                         ))}
                                     </Select>
                                 </FormControl>
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="BPM (tempo)"
-                                    type="number"
-                                    fullWidth
-                                    value={bpm}
-                                    onChange={e => setBpm(e.target.value)}
-                                    inputProps={{ min: 40, max: 300 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    label="Notas del músico"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={notas}
-                                    onChange={e => setNotas(e.target.value)}
-                                    placeholder="Observaciones, capo, digitaciones especiales..."
-                                />
                             </Grid>
                         </Grid>
                     </CardContent>

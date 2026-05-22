@@ -12,12 +12,14 @@ import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 const DRAWER_WIDTH = 240;
 
 const menuItems = [
     { label: 'Canciones',       icon: <LibraryMusicIcon />, path: '/canciones' },
     { label: 'Nueva Canción',   icon: <AddCircleIcon />,    path: '/canciones/nueva' },
+    { label: 'Esquemas de Misa',icon: <EventNoteIcon />,    path: '/esquemas' },
 ];
 
 export default function Layout() {
@@ -69,7 +71,7 @@ export default function Layout() {
                         color="inherit"
                         edge="start"
                         onClick={() => setMobileOpen(!mobileOpen)}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
+                        sx={{ mr: 2, display: { lg: 'none' } }}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -103,14 +105,14 @@ export default function Layout() {
             </AppBar>
 
             {/* Drawer lateral */}
-            <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}>
+            <Box component="nav" sx={{flexShrink: { lg: 0 } }}>
                 {/* Mobile */}
                 <Drawer
                     variant="temporary"
                     open={mobileOpen}
                     onClose={() => setMobileOpen(false)}
                     ModalProps={{ keepMounted: true }}
-                    sx={{ display: { xs: 'block', sm: 'none' },
+                    sx={{ display: { xs: 'block', lg: 'none' },
                         '& .MuiDrawer-paper': { width: DRAWER_WIDTH } }}
                 >
                     {drawer}
@@ -118,7 +120,7 @@ export default function Layout() {
                 {/* Desktop */}
                 <Drawer
                     variant="permanent"
-                    sx={{ display: { xs: 'none', sm: 'block' },
+                    sx={{ display: { xs: 'none', lg: 'block' },
                         '& .MuiDrawer-paper': { width: DRAWER_WIDTH } }}
                     open
                 >
@@ -130,8 +132,10 @@ export default function Layout() {
             <Box component="main" sx={{
                 flexGrow: 1,
                 p: 3,
-                width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-                mt: 8
+                mt: 8,
+                minWidth: 0,
+                // ml: { xs: 0, lg: `${DRAWER_WIDTH}px` },
+                width: { xs: '100%', lg: `calc(100% - ${DRAWER_WIDTH}px)` },
             }}>
                 <Outlet />
             </Box>

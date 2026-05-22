@@ -15,6 +15,8 @@ import TempoIcon from '@mui/icons-material/Speed';
 import NotesIcon from '@mui/icons-material/Notes';
 import ModoLectura from '../components/acordes/ModoLectura';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function CancionDetalle() {
     const { id } = useParams();
@@ -106,113 +108,60 @@ export default function CancionDetalle() {
                 </Tooltip>
             </Box>
 
-            <Grid container spacing={3}>
-                {/* Info general */}
-                <Grid item xs={12} md={4}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                                Información
-                            </Typography>
-                            <Divider sx={{ mb: 2 }} />
-
-                            {cancion.autor && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">Autor</Typography>
-                                    <Typography>{cancion.autor}</Typography>
-                                </Box>
-                            )}
-
-                            {cancion.fuente && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">Fuente</Typography>
-                                    <Typography>{cancion.fuente}</Typography>
-                                </Box>
-                            )}
-
-                            {cancion.tonalidad && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">Tonalidad</Typography>
-                                    <Box>
-                                        <Chip
-                                            icon={<MusicNoteIcon />}
-                                            label={cancion.tonalidad}
-                                            size="small"
-                                            color="primary"
-                                            variant="outlined"
-                                        />
-                                    </Box>
-                                </Box>
-                            )}
-
-                            {cancion.bpm && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">Tempo</Typography>
-                                    <Box>
-                                        <Chip
-                                            icon={<TempoIcon />}
-                                            label={`${cancion.bpm} BPM`}
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                    </Box>
-                                </Box>
-                            )}
-
-                            {cancion.notas && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        Notas del músico
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            bgcolor: '#fffde7',
-                                            p: 1,
-                                            borderRadius: 1,
-                                            mt: 0.5,
-                                            border: '1px solid #fff9c4'
-                                        }}
-                                    >
-                                        {cancion.notas}
-                                    </Typography>
-                                </Box>
-                            )}
-
-                            {/* Secciones */}
-                            {cancion.secciones_detalle?.length > 0 && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        Secciones de la Misa
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-                                        {cancion.secciones_detalle.map(s => (
-                                            <Chip key={s.id} label={s.nombre} size="small" color="primary" />
-                                        ))}
-                                    </Box>
-                                </Box>
-                            )}
-
-                            {/* Tipos */}
-                            {cancion.tipos_detalle?.length > 0 && (
-                                <Box sx={{ mb: 1.5 }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        Tipos
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
-                                        {cancion.tipos_detalle.map(t => (
-                                            <Chip key={t.id} label={t.nombre} size="small" color="secondary" />
-                                        ))}
-                                    </Box>
-                                </Box>
-                            )}
-                        </CardContent>
-                    </Card>
+            <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
+                {/* Info en acordeón */}
+                <Grid  item xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
+                    <Accordion defaultExpanded={false}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+                                <Typography fontWeight="bold">Información</Typography>
+                                {cancion.tonalidad && (
+                                    <Chip icon={<MusicNoteIcon />} label={cancion.tonalidad} size="small" color="primary" variant="outlined" />
+                                )}
+                                {cancion.bpm && (
+                                    <Chip label={`${cancion.bpm} BPM`} size="small" variant="outlined" />
+                                )}
+                                {cancion.secciones_detalle?.map(s => (
+                                    <Chip key={s.id} label={s.nombre} size="small" color="primary" />
+                                ))}
+                                {cancion.tipos_detalle?.map(t => (
+                                    <Chip key={t.id} label={t.nombre} size="small" color="secondary" />
+                                ))}
+                            </Box>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={2}>
+                                {cancion.autor && (
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="caption" color="text.secondary">Autor</Typography>
+                                        <Typography>{cancion.autor}</Typography>
+                                    </Grid>
+                                )}
+                                {cancion.fuente && (
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="caption" color="text.secondary">Fuente</Typography>
+                                        <Typography>{cancion.fuente}</Typography>
+                                    </Grid>
+                                )}
+                                {cancion.notas && (
+                                    <Grid item xs={12}>
+                                        <Typography variant="caption" color="text.secondary">Notas del músico</Typography>
+                                        <Typography variant="body2" sx={{
+                                            bgcolor: 'action.hover',
+                                            p: 1, borderRadius: 1, mt: 0.5
+                                        }}>
+                                            📌 {cancion.notas}
+                                        </Typography>
+                                    </Grid>
+                                )}
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
                 </Grid>
 
-                {/* Letra con acordes */}
-                <Grid item xs={12} md={8}>
-                    <Card>
+                {/* Letra */}
+                <Grid item xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
+                    <Card sx={{ width: '100%' }}>
                         <CardContent>
                             <VisualizadorLetra
                                 contenido={cancion.letra?.contenido}
@@ -223,6 +172,7 @@ export default function CancionDetalle() {
                         </CardContent>
                     </Card>
                 </Grid>
+
             </Grid>
             {modoLectura && (
                 <ModoLectura

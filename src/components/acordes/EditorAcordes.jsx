@@ -9,33 +9,95 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { ListItemButton, ListItemText, Collapse, Tabs, Tab } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const GRUPOS_ACORDES = [
-    { label: 'Mayores',         acordes: ['C','D','E','F','G','A','B'] },
-    { label: 'Menores',         acordes: ['Cm','Dm','Em','Fm','Gm','Am','Bm'] },
-    { label: 'Sostenidos',      acordes: ['C#','D#','F#','G#','A#','C#m','D#m','F#m','G#m','A#m'] },
-    { label: 'Bemoles',         acordes: ['Db','Eb','Gb','Ab','Bb','Dbm','Ebm','Gbm','Abm','Bbm'] },
-    { label: '7ª Dom',          acordes: ['C7','D7','E7','F7','G7','A7','B7','Db7','Eb7','F#7','Ab7','Bb7'] },
-    { label: '7ª Men',          acordes: ['Cm7','Dm7','Em7','Fm7','Gm7','Am7','Bm7'] },
-    { label: 'Maj7',            acordes: ['Cmaj7','Dmaj7','Emaj7','Fmaj7','Gmaj7','Amaj7','Bmaj7','Dbmaj7','Ebmaj7','Abmaj7','Bbmaj7'] },
-    { label: 'Sus2',            acordes: ['Csus2','Dsus2','Esus2','Fsus2','Gsus2','Asus2','Bsus2'] },
-    { label: 'Sus4',            acordes: ['Csus4','Dsus4','Esus4','Fsus4','Gsus4','Asus4','Bsus4'] },
-    { label: '7sus4',           acordes: ['C7sus4','D7sus4','E7sus4','F7sus4','G7sus4','A7sus4','B7sus4'] },
-    { label: 'Add9',            acordes: ['Cadd9','Dadd9','Eadd9','Fadd9','Gadd9','Aadd9','Badd9'] },
-    { label: '9ª',              acordes: ['C9','D9','E9','F9','G9','A9','B9','Cm9','Dm9','Em9','Gm9','Am9'] },
-    { label: 'Dim',             acordes: ['Cdim','Ddim','Edim','Fdim','Gdim','Adim','Bdim','Cdim7','Ddim7','Gdim7','Adim7'] },
-    { label: 'Aug',             acordes: ['Caug','Daug','Eaug','Faug','Gaug','Aaug','Baug'] },
-    { label: 'm7b5',            acordes: ['Cm7b5','Dm7b5','Em7b5','Fm7b5','Gm7b5','Am7b5','Bm7b5'] },
-    { label: 'Slash',           acordes: ['C/E','C/G','D/F#','D/A','E/G#','F/A','G/B','G/F','A/C#','A/G','Am/E','Am/G','Dm/F','Em/G'] },
-    { label: 'Alterados',       acordes: ['G7b9','G7#9','D7b9','A7b9','E7b9','C7#11','F7#11','Bb7#11'] },
+    { label: 'Mayores', acordes: ['C', 'D', 'E', 'F', 'G', 'A', 'B'] },
+    { label: 'Menores', acordes: ['Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Bm'] },
+    { label: 'Sostenidos', acordes: ['C#', 'D#', 'F#', 'G#', 'A#', 'C#m', 'D#m', 'F#m', 'G#m', 'A#m'] },
+    { label: 'Bemoles', acordes: ['Db', 'Eb', 'Gb', 'Ab', 'Bb', 'Dbm', 'Ebm', 'Gbm', 'Abm', 'Bbm'] },
+    { label: '7ª Dom', acordes: ['C7', 'D7', 'E7', 'F7', 'G7', 'A7', 'B7', 'Db7', 'Eb7', 'F#7', 'Ab7', 'Bb7'] },
+    { label: '7ª Men', acordes: ['Cm7', 'Dm7', 'Em7', 'Fm7', 'Gm7', 'Am7', 'Bm7'] },
+    { label: 'Maj7', acordes: ['Cmaj7', 'Dmaj7', 'Emaj7', 'Fmaj7', 'Gmaj7', 'Amaj7', 'Bmaj7', 'Dbmaj7', 'Ebmaj7', 'Abmaj7', 'Bbmaj7'] },
+    { label: 'Sus2', acordes: ['Csus2', 'Dsus2', 'Esus2', 'Fsus2', 'Gsus2', 'Asus2', 'Bsus2'] },
+    { label: 'Sus4', acordes: ['Csus4', 'Dsus4', 'Esus4', 'Fsus4', 'Gsus4', 'Asus4', 'Bsus4'] },
+    { label: '7sus4', acordes: ['C7sus4', 'D7sus4', 'E7sus4', 'F7sus4', 'G7sus4', 'A7sus4', 'B7sus4'] },
+    { label: 'Add9', acordes: ['Cadd9', 'Dadd9', 'Eadd9', 'Fadd9', 'Gadd9', 'Aadd9', 'Badd9'] },
+    { label: '9ª', acordes: ['C9', 'D9', 'E9', 'F9', 'G9', 'A9', 'B9', 'Cm9', 'Dm9', 'Em9', 'Gm9', 'Am9'] },
+    { label: 'Dim', acordes: ['Cdim', 'Ddim', 'Edim', 'Fdim', 'Gdim', 'Adim', 'Bdim', 'Cdim7', 'Ddim7', 'Gdim7', 'Adim7'] },
+    { label: 'Aug', acordes: ['Caug', 'Daug', 'Eaug', 'Faug', 'Gaug', 'Aaug', 'Baug'] },
+    { label: 'm7b5', acordes: ['Cm7b5', 'Dm7b5', 'Em7b5', 'Fm7b5', 'Gm7b5', 'Am7b5', 'Bm7b5'] },
+    { label: 'Slash', acordes: ['C/E', 'C/G', 'D/F#', 'D/A', 'E/G#', 'F/A', 'G/B', 'G/F', 'A/C#', 'A/G', 'Am/E', 'Am/G', 'Dm/F', 'Em/G'] },
+    { label: 'Alterados', acordes: ['G7b9', 'G7#9', 'D7b9', 'A7b9', 'E7b9', 'C7#11', 'F7#11', 'Bb7#11'] },
+];
+
+const PESTANAS_ACORDES = [
+    {
+        label: 'May/Men',
+        acordes: [
+            'C', 'D', 'E', 'F', 'G', 'A', 'B',
+            'Cm', 'Dm', 'Em', 'Fm', 'Gm', 'Am', 'Bm',
+        ]
+    },
+    {
+        label: '# / b',
+        acordes: [
+            'C#', 'D#', 'F#', 'G#', 'A#',
+            'C#m', 'D#m', 'F#m', 'G#m', 'A#m',
+            'Db', 'Eb', 'Gb', 'Ab', 'Bb',
+            'Dbm', 'Ebm', 'Gbm', 'Abm', 'Bbm',
+        ]
+    },
+    {
+        label: '7as',
+        acordes: [
+            'C7', 'D7', 'E7', 'F7', 'G7', 'A7', 'B7',
+            'Cm7', 'Dm7', 'Em7', 'Fm7', 'Gm7', 'Am7', 'Bm7',
+            'Cmaj7', 'Dmaj7', 'Fmaj7', 'Gmaj7', 'Amaj7', 'Bmaj7',
+            'Db7', 'Eb7', 'F#7', 'Ab7', 'Bb7',
+            'Dbmaj7', 'Ebmaj7', 'Abmaj7', 'Bbmaj7',
+        ]
+    },
+    {
+        label: 'Sus/Add',
+        acordes: [
+            'Csus2', 'Dsus2', 'Esus2', 'Fsus2', 'Gsus2', 'Asus2', 'Bsus2',
+            'Csus4', 'Dsus4', 'Esus4', 'Fsus4', 'Gsus4', 'Asus4', 'Bsus4',
+            'C7sus4', 'D7sus4', 'G7sus4', 'A7sus4',
+            'Cadd9', 'Dadd9', 'Eadd9', 'Fadd9', 'Gadd9', 'Aadd9', 'Badd9',
+        ]
+    },
+    {
+        label: 'Dim/Aug',
+        acordes: [
+            'Cdim', 'Ddim', 'Edim', 'Fdim', 'Gdim', 'Adim', 'Bdim',
+            'Cdim7', 'Ddim7', 'Gdim7', 'Adim7',
+            'Cm7b5', 'Dm7b5', 'Em7b5', 'Gm7b5', 'Am7b5', 'Bm7b5',
+            'Caug', 'Daug', 'Eaug', 'Faug', 'Gaug', 'Aaug', 'Baug',
+        ]
+    },
+    {
+        label: '9as/+',
+        acordes: [
+            'C9', 'D9', 'E9', 'F9', 'G9', 'A9', 'B9',
+            'Cm9', 'Dm9', 'Gm9', 'Am9',
+            'Cmaj9', 'Dmaj9', 'Fmaj9', 'Gmaj9', 'Amaj9',
+            'C/E', 'C/G', 'D/F#', 'E/G#', 'F/A', 'G/B', 'G/F',
+            'A/C#', 'Am/E', 'Dm/F', 'Em/G',
+            'G7b9', 'G7#9', 'D7b9', 'A7b9', 'C7#11', 'F7#11',
+        ]
+    },
 ];
 
 const TIPOS_PARRAFO = [
     { value: 'estrofa', label: 'Estrofa' },
-    { value: 'coro',    label: 'Coro' },
-    { value: 'puente',  label: 'Puente' },
-    { value: 'intro',   label: 'Intro' },
-    { value: 'final',   label: 'Final' },
+    { value: 'coro', label: 'Coro' },
+    { value: 'puente', label: 'Puente' },
+    { value: 'intro', label: 'Intro' },
+    { value: 'final', label: 'Final' },
 ];
 
 function generarId() {
@@ -51,6 +113,8 @@ function textoASegmentos(texto, segmentosViejos = []) {
         acorde: segmentosViejos[i]?.acorde || ''
     }));
 }
+
+
 
 // Componente separado para cada línea — tiene su propio estado de texto
 function LineaEditor({ parrafoId, linea, onActualizar, onEliminar, puedeEliminar, acordeSeleccionado, onAsignarAcorde }) {
@@ -146,6 +210,7 @@ function LineaEditor({ parrafoId, linea, onActualizar, onEliminar, puedeEliminar
 
 export default function EditorAcordes({ valor = [], onChange }) {
     const [acordeSeleccionado, setAcordeSeleccionado] = useState('');
+    const [pestanaAcorde, setPestanaAcorde] = useState(0);
 
     function agregarParrafo() {
         const nuevo = {
@@ -229,39 +294,85 @@ export default function EditorAcordes({ valor = [], onChange }) {
         }));
     }
 
+    function duplicarParrafo(parrafo) {
+    const copia = {
+        ...parrafo,
+        id: generarId(),
+        etiqueta: parrafo.etiqueta + ' (copia)',
+        lineas: parrafo.lineas.map(l => ({
+            ...l,
+            id: generarId(),
+            segmentos: l.segmentos.map(s => ({ ...s, id: generarId() }))
+        }))
+    };
+    const index = valor.findIndex(p => p.id === parrafo.id);
+    const nuevos = [...valor];
+    nuevos.splice(index + 1, 0, copia);
+    onChange(nuevos);
+}
     return (
         <Box>
             {/* Selector de acorde */}
-            <Paper variant="outlined" sx={{ p: 2, mb: 3, bgcolor: '#f9f9f9' }}>
-                <Typography variant="subtitle2" gutterBottom fontWeight="bold">
-                    1. Selecciona un acorde
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-    {GRUPOS_ACORDES.map(grupo => (
-        <Box key={grupo.label}>
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 'bold', mr: 1 }}>
-                {grupo.label}
-            </Typography>
-            <Box sx={{ display: 'inline-flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {grupo.acordes.map(a => (
-                    <Chip
-                        key={a}
-                        label={a}
-                        onClick={() => setAcordeSeleccionado(a === acordeSeleccionado ? '' : a)}
-                        color={acordeSeleccionado === a ? 'primary' : 'default'}
-                        variant={acordeSeleccionado === a ? 'filled' : 'outlined'}
-                        size="small"
-                    />
-                ))}
-            </Box>
-        </Box>
-    ))}
-</Box>
-                {acordeSeleccionado && (
-                    <Typography variant="caption" color="primary" sx={{ mt: 1, display: 'block' }}>
-                        Acorde activo: <strong>{acordeSeleccionado}</strong> — haz clic en una palabra para asignarlo
-                    </Typography>
-                )}
+            <Paper variant="outlined" sx={{ mb: 3 }}>
+                {/* Pestañas */}
+                <Tabs
+                    value={pestanaAcorde}
+                    onChange={(_, v) => setPestanaAcorde(v)}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    sx={{
+                        minHeight: 36,
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                        '& .MuiTab-root': { minHeight: 36, py: 0.5, fontSize: 11, minWidth: 60 },
+                    }}
+                >
+                    {PESTANAS_ACORDES.map((p, i) => (
+                        <Tab key={i} label={p.label} />
+                    ))}
+                </Tabs>
+
+                {/* Acordes de la pestaña activa */}
+                <Box sx={{ p: 1 }}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 0.5,
+                        maxHeight: 100,
+                        overflowY: 'auto',
+                        '&::-webkit-scrollbar': { width: 3 },
+                        '&::-webkit-scrollbar-thumb': { bgcolor: 'divider', borderRadius: 2 },
+                    }}>
+                        {PESTANAS_ACORDES[pestanaAcorde].acordes.map(a => (
+                            <Chip
+                                key={a}
+                                label={a}
+                                onClick={() => setAcordeSeleccionado(a === acordeSeleccionado ? '' : a)}
+                                color={acordeSeleccionado === a ? 'primary' : 'default'}
+                                variant={acordeSeleccionado === a ? 'filled' : 'outlined'}
+                                size="small"
+                                sx={{ fontFamily: 'monospace', cursor: 'pointer', height: 24, fontSize: 11 }}
+                            />
+                        ))}
+                    </Box>
+
+                    {/* Acorde activo */}
+                    {acordeSeleccionado && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                            <Typography variant="caption" color="text.secondary">Activo:</Typography>
+                            <Chip
+                                label={acordeSeleccionado}
+                                color="primary"
+                                size="small"
+                                onDelete={() => setAcordeSeleccionado('')}
+                                sx={{ fontWeight: 'bold', fontFamily: 'monospace' }}
+                            />
+                            <Typography variant="caption" color="text.secondary">
+                                — toca una palabra para asignarlo
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
             </Paper>
 
             <Typography variant="subtitle2" gutterBottom fontWeight="bold">
@@ -305,6 +416,11 @@ export default function EditorAcordes({ valor = [], onChange }) {
                                         <ArrowDownwardIcon fontSize="small" />
                                     </IconButton>
                                 </span>
+                            </Tooltip>
+                            <Tooltip title="Duplicar párrafo">
+                                <IconButton size="small" onClick={() => duplicarParrafo(parrafo)}>
+                                    <ContentCopyIcon fontSize="small" />
+                                </IconButton>
                             </Tooltip>
                             <Tooltip title="Eliminar párrafo">
                                 <IconButton size="small" color="error" onClick={() => eliminarParrafo(parrafo.id)}>
