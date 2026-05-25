@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
     Box, Drawer, AppBar, Toolbar, Typography, List, ListItem,
     ListItemButton, ListItemIcon, ListItemText, IconButton,
-    Divider, Avatar, Menu, MenuItem, Tooltip
+    Divider, Avatar, Menu, MenuItem, Tooltip,Button
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -13,21 +13,28 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import LoginIcon from '@mui/icons-material/Login';
+import WifiOffIcon from '@mui/icons-material/WifiOff';
+import QrCodeIcon from '@mui/icons-material/QrCode';
 
 const DRAWER_WIDTH = 240;
 
-const menuItems = [
-    { label: 'Canciones',       icon: <LibraryMusicIcon />, path: '/canciones' },
-    { label: 'Nueva Canción',   icon: <AddCircleIcon />,    path: '/canciones/nueva' },
-    { label: 'Esquemas de Misa',icon: <EventNoteIcon />,    path: '/esquemas' },
-];
-
 export default function Layout() {
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [anchorEl, setAnchorEl]     = useState(null);
-    const { usuario, logout }         = useAuth();
-    const navigate  = useNavigate();
-    const location  = useLocation();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const { usuario, logout,estaAutenticado } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    const menuItems = [
+        { label: 'Canciones',     icon: <LibraryMusicIcon />, path: '/canciones' },
+        { label: 'Unirse a Sala',  icon: <QrCodeIcon />,       path: '/sala' },
+        ...(estaAutenticado ? [
+            { label: 'Nueva Canción',    icon: <AddCircleIcon />,  path: '/canciones/nueva' },
+            { label: 'Esquemas de Misa', icon: <EventNoteIcon />,  path: '/esquemas' },
+            { label: 'Sin conexión', icon: <WifiOffIcon />, path: '/esquemas/offline' },
+        ] : []),
+    ];
 
     function handleLogout() {
         logout();
@@ -79,49 +86,56 @@ export default function Layout() {
                         Cancionero Católico
                     </Typography>
 
-                    {/* Avatar y menú de usuario */}
-                    <Tooltip title={usuario?.nombre}>
-                        <IconButton onClick={e => setAnchorEl(e.currentTarget)} sx={{ p: 0.5 }}>
-                            <Avatar sx={{ bgcolor: 'secondary.main', width: 35, height: 35, fontSize: 14 }}>
-                                {usuario?.nombre?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
-                            </Avatar>
-                        </IconButton>
-                    </Tooltip>
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={() => setAnchorEl(null)}
-                    >
-                        <MenuItem disabled>
-                            <Typography variant="body2">{usuario?.email}</Typography>
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem onClick={handleLogout}>
-                            <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
-                            Cerrar sesión
-                        </MenuItem>
-                    </Menu>
+                    {estaAutenticado ? (
+                        <>
+                            <Tooltip title={usuario?.nombre}>
+                                <IconButton onClick={e => setAnchorEl(e.currentTarget)} sx={{ p: 0.5 }}>
+                                    <Avatar sx={{ bgcolor: 'secondary.main', width: 35, height: 35, fontSize: 14 }}>
+                                        {usuario?.nombre?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+                                    </Avatar>
+                                </IconButton>
+                            </Tooltip>
+                            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+                                <MenuItem disabled>
+                                    <Typography variant="body2">{usuario?.email}</Typography>
+                                </MenuItem>
+                                <Divider />
+                                <MenuItem onClick={handleLogout}>
+                                    <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
+                                    Cerrar sesión
+                                </MenuItem>
+                            </Menu>
+                        </>
+                    ) : (
+                        <Button color="inherit" onClick={() => navigate('/login')} startIcon={<LoginIcon />}>
+                            Iniciar sesión
+                        </Button>
+                    )}
                 </Toolbar>
             </AppBar>
 
             {/* Drawer lateral */}
-            <Box component="nav" sx={{flexShrink: { lg: 0 } }}>
+            <Box component="nav" sx={{ flexShrink: { lg: 0 } }}>
                 {/* Mobile */}
                 <Drawer
                     variant="temporary"
                     open={mobileOpen}
                     onClose={() => setMobileOpen(false)}
                     ModalProps={{ keepMounted: true }}
-                    sx={{ display: { xs: 'block', lg: 'none' },
-                        '& .MuiDrawer-paper': { width: DRAWER_WIDTH } }}
+                    sx={{
+                        display: { xs: 'block', lg: 'none' },
+                        '& .MuiDrawer-paper': { width: DRAWER_WIDTH }
+                    }}
                 >
                     {drawer}
                 </Drawer>
                 {/* Desktop */}
                 <Drawer
                     variant="permanent"
-                    sx={{ display: { xs: 'none', lg: 'block' },
-                        '& .MuiDrawer-paper': { width: DRAWER_WIDTH } }}
+                    sx={{
+                        display: { xs: 'none', lg: 'block' },
+                        '& .MuiDrawer-paper': { width: DRAWER_WIDTH }
+                    }}
                     open
                 >
                     {drawer}
@@ -131,7 +145,7 @@ export default function Layout() {
             {/* Contenido principal */}
             <Box component="main" sx={{
                 flexGrow: 1,
-                 p: { xs: 1, sm: 3 },
+                p: { xs: 1, sm: 3 },
                 mt: 8,
                 minWidth: 0,
                 // ml: { xs: 0, lg: `${DRAWER_WIDTH}px` },

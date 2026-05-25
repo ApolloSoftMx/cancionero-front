@@ -14,7 +14,10 @@ import Layout from './components/Layout';
 import Esquemas from './pages/Esquemas';
 import EsquemaForm from './pages/EsquemaForm';
 import EsquemaEjecucion from './pages/EsquemaEjecucion';
+import EsquemasOffline from './pages/EsquemasOffline';
 import './index.css';
+import Sala from './pages/Sala';
+
 
 function AppRoot() {
     const [modo, setModo] = useState(
@@ -38,21 +41,23 @@ function AppRoot() {
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/" element={
-                            <ProtectedRoute>
-                                <CatalogosProvider>
-                                    <Layout />
-                                </CatalogosProvider>
-                            </ProtectedRoute>
+                            <CatalogosProvider>
+                                <Layout />
+                            </CatalogosProvider>
                         }>
                             <Route index element={<Navigate to="/canciones" replace />} />
                             <Route path="canciones" element={<Canciones />} />
-                            <Route path="canciones/nueva" element={<CancionForm />} />
+                            // Ruta pública, sin ProtectedRoute
+                            <Route path="sala" element={<Sala />} />
+                            <Route path="sala/:codigo" element={<Sala />} />
+                            <Route path="canciones/nueva" element={<ProtectedRoute><CancionForm /></ProtectedRoute>} />
                             <Route path="canciones/:id" element={<CancionDetalle />} />
-                            <Route path="canciones/:id/editar" element={<CancionForm />} />
-                            <Route path="esquemas" element={<Esquemas />} />
-                            <Route path="esquemas/nuevo" element={<EsquemaForm />} />
-                            <Route path="esquemas/:id/editar" element={<EsquemaForm />} />
-                            <Route path="esquemas/:id/ejecutar" element={<EsquemaEjecucion />} />
+                            <Route path="canciones/:id/editar" element={<ProtectedRoute><CancionForm /></ProtectedRoute>} />
+                            <Route path="esquemas" element={<ProtectedRoute><Esquemas /></ProtectedRoute>} />
+                            <Route path="esquemas/nuevo" element={<ProtectedRoute><EsquemaForm /></ProtectedRoute>} />
+                            <Route path="esquemas/:id/editar" element={<ProtectedRoute><EsquemaForm /></ProtectedRoute>} />
+                            <Route path="esquemas/:id/ejecutar" element={<ProtectedRoute><EsquemaEjecucion /></ProtectedRoute>} />
+                            <Route path="esquemas/offline" element={<EsquemasOffline />} />
                         </Route>
                     </Routes>
                 </AuthProvider>

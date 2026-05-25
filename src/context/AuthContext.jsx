@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { limpiarCacheCatalogos } from './CatalogosContext';
 
 const AuthContext = createContext();
 
@@ -20,10 +21,14 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('usuario');
         setToken(null);
         setUsuario(null);
+         // Limpiar cache de catálogos
+        limpiarCacheCatalogos();
     }
 
+    const estaAutenticado = Boolean(token);
+
     return (
-        <AuthContext.Provider value={{ token, usuario, login, logout }}>
+        <AuthContext.Provider value={{ token, usuario, login, logout, estaAutenticado }}>
             {children}
         </AuthContext.Provider>
     );

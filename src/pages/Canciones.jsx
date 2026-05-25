@@ -19,8 +19,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { useAuth } from '../context/AuthContext';
+
 
 export default function Canciones() {
+    const { estaAutenticado } = useAuth();
     const [canciones,  setCanciones]  = useState([]);
     const [loading,    setLoading]    = useState(true);
     const [error,      setError]      = useState('');
@@ -44,7 +47,8 @@ export default function Canciones() {
             if (buscar)    params.buscar     = buscar;
             if (seccionId) params.seccion_id = seccionId;
             if (tipoId)    params.tipo_id    = tipoId;
-            const { data } = await api.get('/canciones', { params });
+            const endpoint = estaAutenticado ? '/canciones' : '/publico/canciones';
+            const { data } = await api.get(endpoint, { params });
             setCanciones(data);
         } catch {
             setError('Error al cargar canciones');
@@ -70,9 +74,9 @@ export default function Canciones() {
             {/* Encabezado */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h5" fontWeight="bold">Canciones</Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate('/canciones/nueva')}>
+                {estaAutenticado && <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate('/canciones/nueva')}>
                     Nueva
-                </Button>
+                </Button>}
             </Box>
 
             {/* Filtros */}
@@ -144,7 +148,7 @@ export default function Canciones() {
 
                         {/* Fila principal */}
                         <ListItem disablePadding>
-                            <ListItemButton onClick={() => toggleExpandida(cancion.id)} sx={{ pr: 14 }}>
+                            <ListItemButton onClick={() => navigate(`/canciones/${cancion.id}`)} sx={{ pr: 14 }}>
                                 <ListItemText
                                     primary={
                                         <Typography fontWeight="bold" noWrap>
@@ -161,6 +165,14 @@ export default function Canciones() {
                                             {cancion.tonalidad && (
                                                 <Chip label={cancion.tonalidad} size="small" color="primary" variant="outlined" sx={{ height: 18, fontSize: 10 }} />
                                             )}
+                                            {cancion.tipos && (
+                                                cancion.tipos.split(', ').map((t, i) => (
+                                                    <Chip key={i} label={t} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: 10 }}/>
+                                                ))
+                                            )}
+                                            {cancion.secciones && (
+                                                <Chip label={cancion.secciones} size="small" color="success" variant ="filled" sx={{ height: 18, fontSize: 10 }}/>
+                                            )}
                                         </Box>
                                     }
                                 />
@@ -173,11 +185,13 @@ export default function Canciones() {
                                         <MenuBookIcon fontSize="small" />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Editar">
-                                    <IconButton size="small" color="primary" onClick={() => navigate(`/canciones/${cancion.id}/editar`)}>
-                                        <EditIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
+                                {estaAutenticado &&
+                                    <Tooltip title="Editar">
+                                        <IconButton size="small" color="primary" onClick={() => navigate(`/canciones/${cancion.id}/editar`)}>
+                                            <EditIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                }
                                 <IconButton size="small" onClick={() => toggleExpandida(cancion.id)}>
                                     {expandida === cancion.id ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
                                 </IconButton>
@@ -185,34 +199,7 @@ export default function Canciones() {
                         </ListItem>
 
                         {/* Detalle expandible */}
-                        <Collapse in={expandida === cancion.id} timeout="auto" unmountOnExit>
-                            <Box sx={{
-                                px: 2, pb: 2,
-                                bgcolor: theme.palette.action.hover,
-                                borderTop: `1px solid ${theme.palette.divider}`
-                            }}>
-                                {cancion.tipos && (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
-                                        {cancion.tipos.split(', ').map((t, i) => (
-                                            <Chip key={i} label={t} size="small" color="secondary" variant="outlined" />
-                                        ))}
-                                    </Box>
-                                )}
-                                {cancion.secciones && (
-                                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
-                                        {cancion.secciones}
-                                    </Typography>
-                                )}
-                                <Button
-                                    size="small"
-                                    startIcon={<VisibilityIcon />}
-                                    onClick={() => navigate(`/canciones/${cancion.id}`)}
-                                    sx={{ mt: 1 }}
-                                >
-                                    Ver completa
-                                </Button>
-                            </Box>
-                        </Collapse>
+                       
                     </Box>
                 ))}
             </List>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate,useLocation  } from 'react-router-dom';
 import api from '../api/axios';
 import ModoLectura from '../components/acordes/ModoLectura';
 import {
@@ -14,23 +14,49 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ListIcon from '@mui/icons-material/List';
 import ShareIcon from '@mui/icons-material/Share';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { guardarEsquemaOffline } from '../utils/offlineStorage';
+import DownloadIcon from '@mui/icons-material/Download';
 
 export default function EsquemaEjecucion() {
-    const { id }       = useParams();
-    const navigate     = useNavigate();
-    const [esquema,    setEsquema]    = useState(null);
-    const [loading,    setLoading]    = useState(true);
-    const [error,      setError]      = useState('');
-    const [actual,     setActual]     = useState(0);
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [esquema, setEsquema] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [actual, setActual] = useState(0);
     const [modoLectura, setModoLectura] = useState(false);
     const [mostrarLista, setMostrarLista] = useState(false);
-    const [copiado,    setCopiado]    = useState(false);
-    const pollingRef   = useRef(null);
+    const [copiado, setCopiado] = useState(false);
+    const pollingRef = useRef(null);
+    const [descargando, setDescargando] = useState(false);
+    const [descargado, setDescargado] = useState(false);
+
+    const location = useLocation();
+    const modoOffline = location.state?.offline || false;
+
+
+    async function handleDescargar() {
+        try {
+            setDescargando(true);
+            await guardarEsquemaOffline(esquema);
+            setDescargado(true);
+            setTimeout(() => setDescargado(false), 3000);
+        } catch {
+            alert('Error al guardar offline');
+        } finally {
+            setDescargando(false);
+        }
+    }
 
     useEffect(() => {
+    if (modoOffline && location.state?.esquema) {
+        setEsquema(location.state.esquema);
+        setActual(0);
+        setLoading(false);
+    } else {
         cargarEsquema();
-        return () => clearInterval(pollingRef.current);
-    }, [id]);
+    }
+}, [id]);
 
     async function cargarEsquema() {
         try {
@@ -82,16 +108,16 @@ export default function EsquemaEjecucion() {
     if (error) return <Alert severity="error">{error}</Alert>;
     if (!esquema) return null;
 
-    const canciones   = esquema.canciones || [];
+    const canciones = esquema.canciones || [];
     const cancionActual = canciones[actual];
 
     // Construir objeto cancion compatible con ModoLectura
     const cancionParaLectura = cancionActual ? {
         titulo: cancionActual.titulo,
-        autor:  cancionActual.autor,
-        notas:  cancionActual.nota_director || cancionActual.notas,
+        autor: cancionActual.autor,
+        notas: cancionActual.nota_director || cancionActual.notas,
         tonalidad: cancionActual.tonalidad,
-        letra:  cancionActual.letra,
+        letra: cancionActual.letra,
     } : null;
 
     return (
@@ -101,6 +127,15 @@ export default function EsquemaEjecucion() {
                 <Tooltip title="Volver">
                     <IconButton onClick={() => navigate('/esquemas')}>
                         <ArrowBackIosIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={descargado ? '¡Guardado!' : 'Guardar para uso offline'}>
+                    <IconButton
+                        onClick={handleDescargar}
+                        disabled={descargando}
+                        color={descargado ? 'success' : 'default'}
+                    >
+                        {descargando ? <CircularProgress size={20} /> : <DownloadIcon />}
                     </IconButton>
                 </Tooltip>
                 <Box sx={{ flexGrow: 1, minWidth: 0 }}>

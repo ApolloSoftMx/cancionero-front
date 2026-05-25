@@ -17,6 +17,7 @@ import ModoLectura from '../components/acordes/ModoLectura';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useAuth } from '../context/AuthContext';
 
 export default function CancionDetalle() {
     const { id } = useParams();
@@ -26,6 +27,7 @@ export default function CancionDetalle() {
     const [error, setError] = useState('');
     const [eliminando, setEliminando] = useState(false);
     const [modoLectura, setModoLectura] = useState(false);
+    const { estaAutenticado } = useAuth();
 
     useEffect(() => {
         cargarCancion();
@@ -34,8 +36,11 @@ export default function CancionDetalle() {
     async function cargarCancion() {
         try {
             setLoading(true);
-            const { data } = await api.get(`/canciones/${id}`);
-            setCancion(data);
+            const endpoint = estaAutenticado
+                ? `/canciones/${id}`
+                : `/publico/canciones/${id}`;
+            const { data } = await api.get(endpoint);
+            setCancion(data)
         } catch (err) {
             setError('Error al cargar la canción');
         } finally {
@@ -81,23 +86,20 @@ export default function CancionDetalle() {
                 <Typography variant="h5" fontWeight="bold" sx={{ flexGrow: 1 }}>
                     {cancion.titulo}
                 </Typography>
-                <Tooltip title="Editar">
-                    <IconButton
-                        color="primary"
-                        onClick={() => navigate(`/canciones/${id}/editar`)}
-                    >
-                        <EditIcon />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="Eliminar">
-                    <IconButton
-                        color="error"
-                        onClick={handleEliminar}
-                        disabled={eliminando}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
+                {/* {estaAutenticado && (
+                    <>
+                        <Tooltip title="Editar">
+                            <IconButton color="primary" onClick={() => navigate(`/canciones/${id}/editar`)}>
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Eliminar">
+                            <IconButton color="error" onClick={handleEliminar}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </>
+                )} */}
                 <Tooltip title="Modo lectura en vivo">
                     <IconButton
                         color="success"
@@ -110,7 +112,7 @@ export default function CancionDetalle() {
 
             <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
                 {/* Info en acordeón */}
-                <Grid  item xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
+                <Grid item xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
                     <Accordion defaultExpanded={false}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
