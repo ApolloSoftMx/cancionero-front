@@ -143,10 +143,10 @@ export default function CancionForm() {
                 '& .MuiTab-root.Mui-selected': { color: '#ffffff' },
                 '& .MuiTabs-indicator': { backgroundColor: '#ffffff' },
             }}>
-                <Tab label="Datos generales" />
+                <Tab label="Generales" />
                 <Tab label="Clasificación" />
-                <Tab icon={<EditIcon fontSize="small" />} iconPosition="start" label="Editor de letra" />
-                <Tab icon={<VisibilityIcon fontSize="small" />} iconPosition="start" label="Vista previa" />
+                <Tab icon={<EditIcon fontSize="small" />} iconPosition="start" label="Letra" />
+                <Tab icon={<VisibilityIcon fontSize="small" />} iconPosition="start" label="Previa" />
             </Tabs>
 
             {/* Tab 0 — Datos generales */}

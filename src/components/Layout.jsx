@@ -131,7 +131,7 @@ export default function Layout() {
             {/* Contenido principal */}
             <Box component="main" sx={{
                 flexGrow: 1,
-                p: 3,
+                 p: { xs: 1, sm: 3 },
                 mt: 8,
                 minWidth: 0,
                 // ml: { xs: 0, lg: `${DRAWER_WIDTH}px` },

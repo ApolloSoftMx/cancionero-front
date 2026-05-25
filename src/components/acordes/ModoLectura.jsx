@@ -12,6 +12,8 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { transponerContenido } from '../../utils/transpositor';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function SegmentoLectura({ texto, acorde, mostrarAcordes, fontSize }) {
     return (
@@ -98,7 +100,7 @@ function ParrafoLectura({ parrafo, mostrarAcordes, fontSize, modoOscuro }) {
 
 
 
-export default function ModoLectura({ cancion, onCerrar }) {
+export default function ModoLectura({ cancion, onCerrar, onSiguiente, onAnterior }) {
     const [modoOscuro, setModoOscuro] = useState(true);
     const [mostrarAcordes, setMostrarAcordes] = useState(true);
     const [fontSize, setFontSize] = useState(22);
@@ -108,9 +110,9 @@ export default function ModoLectura({ cancion, onCerrar }) {
     const [semitonos, setSemitonos] = useState(0);
 
     const contenidoTranspuesto = transponerContenido(
-    cancion?.letra?.contenido || [],
-    semitonos
-);
+        cancion?.letra?.contenido || [],
+        semitonos
+    );
 
     const contenedorRef = useRef(null);
     const scrollRef = useRef(null);
@@ -342,6 +344,15 @@ export default function ModoLectura({ cancion, onCerrar }) {
                     gap: 2,
                     borderTop: `1px solid ${modoOscuro ? '#333' : '#ddd'}`,
                 }}>
+                    {/* Anterior */}
+                    {onAnterior && (
+                        <Tooltip title="Canción anterior">
+                            <IconButton onClick={onAnterior} sx={{ color: text }}>
+                                <ArrowBackIcon />
+                            </IconButton>
+                        </Tooltip>
+                    )}
+
                     {/* Play/Pause scroll */}
                     <Tooltip title={scrollActivo ? 'Pausar scroll' : 'Iniciar scroll automático'}>
                         <IconButton
@@ -355,6 +366,14 @@ export default function ModoLectura({ cancion, onCerrar }) {
                             {scrollActivo ? <PauseIcon /> : <PlayArrowIcon />}
                         </IconButton>
                     </Tooltip>
+                    {/* Siguiente */}
+                    {onSiguiente && (
+                        <Tooltip title="Siguiente canción">
+                            <IconButton onClick={onSiguiente} sx={{ color: text }}>
+                                <ArrowForwardIcon />
+                            </IconButton>
+                        </Tooltip>
+                    )}
 
                     {/* Velocidad */}
                     <Typography sx={{ color: text, fontSize: 12, whiteSpace: 'nowrap' }}>
