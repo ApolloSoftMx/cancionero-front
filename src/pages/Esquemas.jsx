@@ -26,6 +26,7 @@ export default function Esquemas() {
             setLoading(true);
             const { data } = await api.get('/esquemas');
             setEsquemas(data);
+            console.log(data);
         } catch (err) {
             setError('Error al cargar esquemas');
         } finally {
@@ -49,8 +50,9 @@ export default function Esquemas() {
 
     function formatFecha(fecha) {
         if (!fecha) return null;
-        return new Date(fecha).toLocaleDateString('es-MX', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        console.log(fecha)
+        return new Date(fecha).toLocaleDateString('es-EU', {
+           timeZone:'UTC', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
         });
     }
 
@@ -91,7 +93,7 @@ export default function Esquemas() {
 
             <Grid container spacing={2}>
                 {esquemas.map(e => (
-                    <Grid item xs={12} sm={6} md={4} key={e.id}>
+                    <Grid xs={12} sm={6} md={4} key={e.id}>
                         <Card sx={{
                             height: '100%', display: 'flex', flexDirection: 'column',
                             '&:hover': { boxShadow: 4 }, transition: 'box-shadow 0.2s'

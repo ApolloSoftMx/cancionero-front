@@ -24,13 +24,13 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Canciones() {
     const { estaAutenticado } = useAuth();
-    const [canciones,  setCanciones]  = useState([]);
-    const [loading,    setLoading]    = useState(true);
-    const [error,      setError]      = useState('');
-    const [buscar,     setBuscar]     = useState('');
-    const [seccionId,  setSeccionId]  = useState('');
-    const [tipoId,     setTipoId]     = useState('');
-    const [expandida,  setExpandida]  = useState(null);
+    const [canciones, setCanciones] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [buscar, setBuscar] = useState('');
+    const [seccionId, setSeccionId] = useState('');
+    const [tipoId, setTipoId] = useState('');
+    const [expandida, setExpandida] = useState(null);
     const { secciones, tipos } = useCatalogos();
     const navigate = useNavigate();
     const theme = useTheme();
@@ -44,9 +44,9 @@ export default function Canciones() {
         try {
             setLoading(true);
             const params = {};
-            if (buscar)    params.buscar     = buscar;
+            if (buscar) params.buscar = buscar;
             if (seccionId) params.seccion_id = seccionId;
-            if (tipoId)    params.tipo_id    = tipoId;
+            if (tipoId) params.tipo_id = tipoId;
             const endpoint = estaAutenticado ? '/canciones' : '/publico/canciones';
             const { data } = await api.get(endpoint, { params });
             setCanciones(data);
@@ -87,12 +87,14 @@ export default function Canciones() {
                     onChange={e => setBuscar(e.target.value)}
                     size="small"
                     sx={{ flexGrow: 1, minWidth: 150 }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon fontSize="small" />
-                            </InputAdornment>
-                        )
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon fontSize="small" />
+                                </InputAdornment>
+                            )
+                        }
                     }}
                 />
                 <FormControl size="small" sx={{ minWidth: 140 }}>
@@ -167,14 +169,16 @@ export default function Canciones() {
                                             )}
                                             {cancion.tipos && (
                                                 cancion.tipos.split(', ').map((t, i) => (
-                                                    <Chip key={i} label={t} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: 10 }}/>
+                                                    <Chip key={i} label={t} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: 10 }} />
                                                 ))
                                             )}
                                             {cancion.secciones && (
-                                                <Chip label={cancion.secciones} size="small" color="success" variant ="filled" sx={{ height: 18, fontSize: 10 }}/>
+                                                <Chip label={cancion.secciones} size="small" color="success" variant="filled" sx={{ height: 18, fontSize: 10 }} />
                                             )}
                                         </Box>
                                     }
+
+                                    disableTypography
                                 />
                             </ListItemButton>
 
@@ -199,7 +203,7 @@ export default function Canciones() {
                         </ListItem>
 
                         {/* Detalle expandible */}
-                       
+
                     </Box>
                 ))}
             </List>

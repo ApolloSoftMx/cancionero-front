@@ -137,9 +137,13 @@ export default function CancionForm() {
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
             {/* Tabs */}
-            <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{
+            <Tabs value={tab} onChange={(_, v) => setTab(v)} 
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            sx={{
                 mb: 3,
-                '& .MuiTab-root': { color: 'rgba(255,255,255,0.7)' },
+                '& .MuiTab-root': { color: 'rgba(29, 160, 221, 0.86)', fontSize: '0.85rem',minHeight: 38,paddingX: 1.2,},
                 '& .MuiTab-root.Mui-selected': { color: '#ffffff' },
                 '& .MuiTabs-indicator': { backgroundColor: '#ffffff' },
             }}>
@@ -155,7 +159,7 @@ export default function CancionForm() {
                     <CardContent>
                         <Grid container spacing={2}>
                             {/* Título — ancho completo */}
-                            <Grid item xs={12}>
+                            <Grid xs={12}>
                                 <TextField
                                     label="Título *"
                                     fullWidth
@@ -165,7 +169,7 @@ export default function CancionForm() {
                             </Grid>
 
                             {/* Autor y Fuente */}
-                            <Grid item xs={12} sm={6}>
+                            <Grid xs={12} sm={6}>
                                 <TextField
                                     label="Autor"
                                     fullWidth
@@ -173,7 +177,7 @@ export default function CancionForm() {
                                     onChange={e => setAutor(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid xs={12} sm={6}>
                                 <TextField
                                     label="Fuente (libro, álbum...)"
                                     fullWidth
@@ -184,19 +188,19 @@ export default function CancionForm() {
 
                             {/* Tonalidad y BPM */}
                             
-                            <Grid item xs={6} sm={3}>
+                            <Grid xs={6} sm={3}>
                                 <TextField
                                     label="BPM"
                                     type="number"
                                     fullWidth
                                     value={bpm}
                                     onChange={e => setBpm(e.target.value)}
-                                    inputProps={{ min: 40, max: 300 }}
+                                    slotProps={{ min: 40, max: 300 }}
                                 />
                             </Grid>
 
                             {/* Notas */}
-                            <Grid item xs={12}>
+                            <Grid xs={12}>
                                 <TextField
                                     label="Notas del músico"
                                     fullWidth
@@ -208,7 +212,7 @@ export default function CancionForm() {
                                 />
                             </Grid>
 
-                            <Grid item xs={6} sm={4}>
+                            <Grid xs={6} sm={4}>
                                 <FormControl fullWidth>
                                     <InputLabel>Tonalidad</InputLabel>
                                     <Select
@@ -231,7 +235,7 @@ export default function CancionForm() {
             {/* Tab 1 — Clasificación */}
             {tab === 1 && (
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
+                    <Grid xs={12} md={6}>
                         <Card>
                             <CardContent>
                                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
@@ -255,7 +259,7 @@ export default function CancionForm() {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid xs={12} md={6}>
                         <Card>
                             <CardContent>
                                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
@@ -281,7 +285,7 @@ export default function CancionForm() {
                     </Grid>
                     {/* Resumen de selección */}
                     {(seccionesSeleccionadas.length > 0 || tiposSeleccionados.length > 0) && (
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <Card variant="outlined">
                                 <CardContent>
                                     <Typography variant="subtitle2" gutterBottom>Seleccionados:</Typography>

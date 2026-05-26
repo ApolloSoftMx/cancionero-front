@@ -112,7 +112,7 @@ export default function CancionDetalle() {
 
             <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
                 {/* Info en acordeón */}
-                <Grid item xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
+                <Grid xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
                     <Accordion defaultExpanded={false}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -134,19 +134,19 @@ export default function CancionDetalle() {
                         <AccordionDetails>
                             <Grid container spacing={2}>
                                 {cancion.autor && (
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid xs={12} sm={6}>
                                         <Typography variant="caption" color="text.secondary">Autor</Typography>
                                         <Typography>{cancion.autor}</Typography>
                                     </Grid>
                                 )}
                                 {cancion.fuente && (
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid xs={12} sm={6}>
                                         <Typography variant="caption" color="text.secondary">Fuente</Typography>
                                         <Typography>{cancion.fuente}</Typography>
                                     </Grid>
                                 )}
                                 {cancion.notas && (
-                                    <Grid item xs={12}>
+                                    <Grid xs={12}>
                                         <Typography variant="caption" color="text.secondary">Notas del músico</Typography>
                                         <Typography variant="body2" sx={{
                                             bgcolor: 'action.hover',
@@ -162,7 +162,7 @@ export default function CancionDetalle() {
                 </Grid>
 
                 {/* Letra */}
-                <Grid item xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
+                <Grid xs={12} sx={{ width: '100%', px: { xs: 0 } }}>
                     <Card sx={{ width: '100%' }}>
                         <CardContent>
                             <VisualizadorLetra

@@ -47,7 +47,7 @@ function AppRoot() {
                         }>
                             <Route index element={<Navigate to="/canciones" replace />} />
                             <Route path="canciones" element={<Canciones />} />
-                            // Ruta pública, sin ProtectedRoute
+                            {/* // Ruta pública, sin ProtectedRoute */}
                             <Route path="sala" element={<Sala />} />
                             <Route path="sala/:codigo" element={<Sala />} />
                             <Route path="canciones/nueva" element={<ProtectedRoute><CancionForm /></ProtectedRoute>} />
@@ -66,4 +66,10 @@ function AppRoot() {
     );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<AppRoot />);
+const container = document.getElementById('root');
+
+const root =
+    window.__root ??
+    (window.__root = ReactDOM.createRoot(container));
+
+root.render(<AppRoot />);
