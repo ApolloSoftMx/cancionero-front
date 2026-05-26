@@ -15,10 +15,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        console.log(error)
+        const esRutaPublica = error.config?.url?.includes('/publico/');
+        if (!esRutaPublica && (error.response?.status === 401 || error.response?.status === 403)) {
             localStorage.removeItem('token');
             localStorage.removeItem('usuario');
-            window.location.href = '/remamusic/login';
+            // window.location.href = '/remamusic/login';
         }
         return Promise.reject(error);
     }

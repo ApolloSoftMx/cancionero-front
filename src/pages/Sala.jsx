@@ -47,7 +47,7 @@ export default function Sala() {
         try {
             setLoading(true);
             setError('');
-            const { data } = await api.get(`/esquemas/sala/${codigoLimpio}`);
+            const { data } = await api.get(`/publico/esquemas/sala/${codigoLimpio}`);
             setEsquema(data);
             esquemaRef.current = data;
             setActual(data.cancion_actual || 0);
@@ -64,7 +64,7 @@ export default function Sala() {
         clearInterval(pollingRef.current);
         pollingRef.current = setInterval(async () => {
             try {
-                const { data } = await api.get(`/esquemas/sesion/${esquemaId}`);
+                const { data } = await api.get(`/publico/esquemas/sesion/${esquemaId}`);
                 setActual(prev => {
                     if (prev !== data.cancion_actual) {
                         setSincronizado(true);
